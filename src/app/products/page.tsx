@@ -1,4 +1,4 @@
-import ProductList from "@/containers/OrderList copy";
+import ProductList from "@/containers/ProductList";
 
 export default function ProductPage() {
   return <ProductList />;

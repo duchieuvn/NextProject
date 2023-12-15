@@ -1,0 +1,26 @@
+[
+  {
+    "id": "1",
+    "name": "Hộp LK Bay",
+    "retail_price": 135000,
+    "original_price": 117000
+  },
+  {
+    "id": "2",
+    "name": "Hộp LK BB702",
+    "retail_price": 85000,
+    "original_price": 73000
+  },
+  {
+    "id": "3",
+    "name": "Bịch LK Matcha",
+    "retail_price": 60000,
+    "original_price": 45000
+  },
+  {
+    "id": "4",
+    "name": "Combo 5 vị",
+    "retail_price": 69000,
+    "original_price": 52000
+  }
+]

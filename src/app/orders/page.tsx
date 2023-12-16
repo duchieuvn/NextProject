@@ -1,4 +1,4 @@
-import OrderList from "@/containers/OrderList";
+import OrderList from "@/containers/order/OrderList";
 
 export default function OrderPage() {
   return <OrderList />;

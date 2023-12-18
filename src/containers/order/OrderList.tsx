@@ -1,13 +1,12 @@
-import { getOrders } from "@/services/apiOrders";
+import { getOrdersAPI } from "@/api/apiOrders";
 import { Flex } from "antd";
 
 import { Descriptions } from "antd";
 import type { DescriptionsProps } from "antd";
 
 export default async function OrderList() {
-  const data = await getOrders();
+  const data = await getOrdersAPI();
 
-  console.log(data);
   return (
     <Flex gap="small" vertical>
       <h2>Tất cả đơn hàng</h2>

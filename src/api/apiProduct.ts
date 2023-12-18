@@ -1,6 +1,6 @@
 import supabase from "./supabase";
 
-export async function getProducts() {
+export async function getProductsAPI() {
   const { data, error } = await supabase.from("product").select("*");
   if (error) {
     console.error(error);

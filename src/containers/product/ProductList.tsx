@@ -1,17 +1,13 @@
 "use client";
-import { getProducts } from "@/services/apiProduct";
+import { getProductsAPI } from "@/api/apiProduct";
 import { Avatar, Card, Flex } from "antd";
 import { RightSquareOutlined } from "@ant-design/icons";
 import Meta from "antd/es/card/Meta";
 import useSWR from "swr";
+import { useGetProducts } from "@/app/hooks";
 
 export default function ProductList() {
-  const { data, error, isLoading } = useSWR(
-    "_allProducts",
-    async (key: string) => {
-      return await getProducts();
-    }
-  );
+  const { data, error, isLoading } = useGetProducts();
   return (
     <>
       <h2>Danh sách sản phẩm</h2>

@@ -1,5 +1,5 @@
 "use client";
-import { Flex, Menu } from "antd";
+import { Button, Flex, Menu } from "antd";
 import type { MenuProps } from "antd";
 import {
   FundViewOutlined,
@@ -68,6 +68,9 @@ export default function NavBar() {
           mode="horizontal"
           items={items}
         />
+        <Link href="/orders/create">
+          <Button>Tạo đơn hàng</Button>
+        </Link>
       </Flex>
     </nav>
   );

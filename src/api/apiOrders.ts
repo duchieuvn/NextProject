@@ -1,3 +1,4 @@
+import { OrderRequest, OrderResponse } from "@/interface/OrderPayload";
 import supabase from "./supabase";
 
 export async function getOrdersAPI() {
@@ -6,11 +7,10 @@ export async function getOrdersAPI() {
     console.error(error);
     throw new Error("Orders could not be load");
   }
-
   return data;
 }
 
-export async function createOneOrderAPI(order: any) {
+export async function createOneOrderAPI(order: OrderRequest) {
   const { data, error } = await supabase.from("order").insert(order);
   if (error) {
     console.error(error);

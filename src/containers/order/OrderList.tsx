@@ -6,6 +6,7 @@ import type { DescriptionsProps } from "antd";
 
 export default async function OrderList() {
   const data = await getOrdersAPI();
+  console.log("don hang \n", data);
 
   return (
     <Flex gap="small" vertical>

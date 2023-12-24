@@ -4,10 +4,12 @@ import { Avatar, Card, Flex } from "antd";
 import { RightSquareOutlined } from "@ant-design/icons";
 import Meta from "antd/es/card/Meta";
 import useSWR from "swr";
-import { useGetProducts } from "@/app/hooks";
 
 export default function ProductList() {
-  const { data, error, isLoading } = useGetProducts();
+  const { data, error, isLoading } = useSWR(
+    "products",
+    async (key: string) => await getProductsAPI()
+  );
   return (
     <>
       <h2>Danh sách sản phẩm</h2>

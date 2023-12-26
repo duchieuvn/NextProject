@@ -1,15 +1,12 @@
 "use client";
-import { getProductsAPI } from "@/api/apiProduct";
 import { Avatar, Card, Flex } from "antd";
 import { RightSquareOutlined } from "@ant-design/icons";
 import Meta from "antd/es/card/Meta";
 import useSWR from "swr";
+import { useGetProducts } from "@/hooks/product";
 
 export default function ProductList() {
-  const { data, error, isLoading } = useSWR(
-    "products",
-    async (key: string) => await getProductsAPI()
-  );
+  const { data, isLoading } = useGetProducts();
   return (
     <>
       <h2>Danh sách sản phẩm</h2>
@@ -23,8 +20,8 @@ export default function ProductList() {
             >
               <Meta
                 avatar={<Avatar icon={<RightSquareOutlined />} />}
-                title={product.name}
-                description={product.retail_price}
+                title={product?.name}
+                description={product?.retail_price}
               />
             </Card>
           );

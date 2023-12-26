@@ -1,11 +1,13 @@
+"use client";
 import { getOrdersAPI } from "@/api/apiOrders";
+import { useGetOrders } from "@/hooks/order";
 import { Flex } from "antd";
 
 import { Descriptions } from "antd";
 import type { DescriptionsProps } from "antd";
 
-export default async function OrderList() {
-  const data = await getOrdersAPI();
+export default function OrderList() {
+  const { data, isLoading } = useGetOrders();
   console.log("don hang \n", data);
 
   return (

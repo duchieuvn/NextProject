@@ -7,9 +7,19 @@ import OrderFormProducts from "@/components/OrderFormProducts";
 import { createOneOrderAPI } from "@/api/apiOrders";
 import { useCreateOrder } from "@/hooks/order";
 import { OrderRequest } from "@/interface/OrderPayload";
+import { ORDERS_QUERY_KEY } from "@/constants/query/keys";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 export default function OrderForm() {
+  const queryClient = useQueryClient();
+  const { mutate, isPending } = useMutation({
+    mutationFn: createOneOrderAPI,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: [ORDERS_QUERY_KEY] });
+    },
+  });
   const [form] = Form.useForm();
+
   return (
     <>
       <Alert message="Success Tips" type="success" showIcon />
@@ -21,18 +31,26 @@ export default function OrderForm() {
         autoComplete="off"
         initialValues={{}}
         onFinish={() => {
-          const data: OrderRequest = form.getFieldsValue();
-          console.log("data: \n", data);
-          // | "phone_number"
-          // | "customer_name"
-          // | "location"
-          // | "ship_price"
-          // | "discount"
-          // | "expected_date"
-          // | "expected_time"
-          mutate<OrderRequest>("orders", () => createOneOrderAPI(data));
-          // const formOrder = form.getFieldsValue();
-          // useCreateOrder(formOrder);
+          const formInput = form.getFieldsValue();
+          const {
+            phone_number,
+            customer_name,
+            location,
+            ship_price,
+            discount,
+            expected_date,
+          } = formInput;
+
+          const orderData: OrderRequest = {
+            phone_number,
+            customer_name,
+            location,
+            ship_price,
+            discount,
+            expected_date,
+            expected_time: null,
+          };
+          mutate(orderData);
         }}
       >
         <Card size="small" title={`Đơn hàng`}>

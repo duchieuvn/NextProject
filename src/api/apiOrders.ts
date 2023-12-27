@@ -3,7 +3,10 @@ import supabase from "./supabase";
 import { ORDER_TABLE } from "@/constants/table";
 
 export async function getOrdersAPI() {
-  const { data, error } = await supabase.from(ORDER_TABLE).select("*");
+  const { data, error } = await supabase
+    .from(ORDER_TABLE)
+    .select("*")
+    .returns<OrderResponse[]>();
   if (error) {
     console.error(error);
     throw new Error("Orders could not be load");
@@ -13,11 +16,11 @@ export async function getOrdersAPI() {
 
 export async function createOneOrderAPI(
   order?: OrderRequest
-): Promise<OrderRequest> {
+): Promise<OrderResponse> {
   const { data, error } = await supabase
     .from("order")
     .insert(order)
-    .returns<OrderRequest>();
+    .returns<OrderResponse>();
   if (error) {
     console.error(error);
     throw new Error("Order could not be create");

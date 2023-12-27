@@ -2,11 +2,15 @@
 import { Avatar, Card, Flex } from "antd";
 import { RightSquareOutlined } from "@ant-design/icons";
 import Meta from "antd/es/card/Meta";
-import useSWR from "swr";
-import { useGetProducts } from "@/hooks/product";
+import { useQuery } from "@tanstack/react-query";
+import { PRODUCTS_QUERY_KEY } from "@/constants/query/keys";
+import { getProductsAPI } from "@/api/apiProduct";
 
 export default function ProductList() {
-  const { data, isLoading } = useGetProducts();
+  const { data, isLoading } = useQuery({
+    queryKey: [PRODUCTS_QUERY_KEY],
+    queryFn: getProductsAPI,
+  });
   return (
     <>
       <h2>Danh sách sản phẩm</h2>

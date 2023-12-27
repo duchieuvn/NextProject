@@ -1,13 +1,17 @@
 "use client";
 import { getOrdersAPI } from "@/api/apiOrders";
-import { useGetOrders } from "@/hooks/order";
+import { ORDERS_QUERY_KEY } from "@/constants/query/keys";
+import { useQuery } from "@tanstack/react-query";
 import { Flex } from "antd";
 
 import { Descriptions } from "antd";
 import type { DescriptionsProps } from "antd";
 
 export default function OrderList() {
-  const { data, isLoading } = useGetOrders();
+  const { data, isLoading } = useQuery({
+    queryKey: [ORDERS_QUERY_KEY],
+    queryFn: getOrdersAPI,
+  });
   console.log("don hang \n", data);
 
   return (
@@ -38,7 +42,7 @@ export default function OrderList() {
           {
             key: "expected_date",
             label: "Ngày giao hàng",
-            children: order.expected_date,
+            children: null,
           },
           {
             key: "is_paid",

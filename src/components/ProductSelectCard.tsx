@@ -16,6 +16,7 @@ import { useEffect } from "react";
 import useSWR from "swr";
 import { getProductsAPI } from "@/api/apiProduct";
 import OrderFormInfo from "@/components/OrderFormInfo";
+import { useGetProducts } from "@/hooks/product";
 
 export default function ProductSelectCard({
   key,
@@ -26,18 +27,16 @@ export default function ProductSelectCard({
   subField: FormListFieldData;
   subOpt: FormListOperation;
 }) {
-  const { data, error, isLoading } = useSWR(
-    "products",
-    async (key: string) => await getProductsAPI()
-  );
+  const { data, error, isLoading } = useGetProducts();
   console.log(data);
   return (
     <Card key={key}>
-      <Form.Item label="Tên sản phẩm" name={[subField.name, "product_name"]}>
+      {/* Reference to order_product table */}
+      <Form.Item label="Tên sản phẩm" name={[subField.name, "product_id"]}>
         <Select>
           {data?.map((p) => {
             return (
-              <Select.Option key={p.name} value={p.name}>
+              <Select.Option key={p.name} value={p.id}>
                 {p.name}
               </Select.Option>
             );

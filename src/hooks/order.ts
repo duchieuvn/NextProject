@@ -1,16 +1,14 @@
 import { createOneOrderAPI, getOrdersAPI } from "@/api/apiOrders";
-import { ORDERS } from "@/constants/query/keys";
+import { ORDERS_QUERY_KEY } from "@/constants/query/keys";
 import { OrderRequest } from "@/interface/OrderPayload";
 import useSWR, { mutate } from "swr";
 
 export const useGetOrders = () => {
-  return useSWR(ORDERS, getOrdersAPI);
+  return useSWR(ORDERS_QUERY_KEY, getOrdersAPI);
 };
 
-export const useCreateOrder = () => {
-  return (order: OrderRequest) => {
-    return mutate<OrderRequest>("orders", () => createOneOrderAPI(order));
-  };
+export const useCreateOrder = async (order: OrderRequest) => {
+  return await mutate<OrderRequest>("orders", () => createOneOrderAPI(order));
 };
 
 // carrying function

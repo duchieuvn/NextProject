@@ -1,22 +1,37 @@
 "use client";
-import { getOrdersAPI } from "@/api/apiOrders";
-import { ORDERS_QUERY_KEY } from "@/constants/query/keys";
-import { useQuery } from "@tanstack/react-query";
-import { Flex } from "antd";
+import { useGetOrders } from "@/hooks/order";
+import { Flex, Select } from "antd";
 
 import { Descriptions } from "antd";
 import type { DescriptionsProps } from "antd";
+import { useState } from "react";
 
 export default function OrderList() {
-  const { data, isLoading } = useQuery({
-    queryKey: [ORDERS_QUERY_KEY],
-    queryFn: getOrdersAPI,
-  });
-  console.log("don hang \n", data);
+  const [sortBy, setSortBy] = useState("created_at");
+  const { data, isLoading } = useGetOrders(sortBy);
 
   return (
     <Flex gap="small" vertical>
       <h2>Tất cả đơn hàng</h2>
+      <Flex>
+        <Select
+          style={{ width: 200 }}
+          placeholder="Sắp xếp theo"
+          onChange={(value) => {
+            setSortBy(value);
+          }}
+          options={[
+            {
+              label: "Ngày tạo",
+              value: "created_at",
+            },
+            {
+              label: "Tên khách hàng",
+              value: "customer_name",
+            },
+          ]}
+        />
+      </Flex>
       {data?.map((order) => {
         const items: DescriptionsProps["items"] = [
           {

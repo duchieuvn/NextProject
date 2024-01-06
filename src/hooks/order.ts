@@ -1,14 +1,10 @@
-import { createOneOrderAPI, getOrdersAPI } from "@/api/apiOrders";
+import { getOrdersAPI } from "@/api/apiOrders";
 import { ORDERS_QUERY_KEY } from "@/constants/query/keys";
-import { OrderRequest } from "@/interface/OrderPayload";
-import useSWR, { mutate } from "swr";
+import { useQuery } from "@tanstack/react-query";
 
-export const useGetOrders = () => {
-  return useSWR(ORDERS_QUERY_KEY, getOrdersAPI);
+export const useGetOrders = (sortBy: string) => {
+  return useQuery({
+    queryKey: [ORDERS_QUERY_KEY, sortBy],
+    queryFn: () => getOrdersAPI(sortBy),
+  });
 };
-
-export const useCreateOrder = async (order: OrderRequest) => {
-  return await mutate<OrderRequest>("orders", () => createOneOrderAPI(order));
-};
-
-// carrying function

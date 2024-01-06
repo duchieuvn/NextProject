@@ -1,11 +1,18 @@
-import { OrderRequest, OrderResponse } from "@/interface/OrderPayload";
+import {
+  OrderFormData,
+  OrderRequest,
+  OrderResponse,
+} from "@/interface/OrderPayload";
 import supabase from "./supabase";
 import { ORDER_TABLE } from "@/constants/table";
+import { createMultipleOrderProductAPI } from "./apiOrderProduct";
+import { OrderProductRequest } from "@/interface/OrderProductPayload";
 
-export async function getOrdersAPI() {
+export async function getOrdersAPI(orderBy: string = "created_at") {
   const { data, error } = await supabase
     .from(ORDER_TABLE)
     .select("*")
+    .order(orderBy, { ascending: false })
     .returns<OrderResponse[]>();
   if (error) {
     console.error(error);
@@ -14,17 +21,61 @@ export async function getOrdersAPI() {
   return data;
 }
 
-export async function createOneOrderAPI(
-  order?: OrderRequest
+export async function createOnlyOrderAPI(
+  order: OrderRequest
 ): Promise<OrderResponse> {
+  console.log("order: ", order);
   const { data, error } = await supabase
-    .from("order")
+    .from(ORDER_TABLE)
     .insert(order)
-    .returns<OrderResponse>();
+    .select()
+    .returns<OrderResponse[]>();
   if (error) {
     console.error(error);
     throw new Error("Order could not be create");
   }
 
-  return data;
+  const [response] = data;
+  return response;
+}
+
+export async function createOrderWithProductsAPI(
+  formData: OrderFormData
+): Promise<any> {
+  const {
+    phone_number,
+    customer_name,
+    location,
+    ship_price,
+    discount,
+    expected_date,
+    expected_time,
+    products,
+  } = formData;
+
+  const orderData: OrderRequest = {
+    phone_number,
+    customer_name,
+    location,
+    ship_price,
+    discount,
+    expected_date,
+    expected_time,
+  };
+
+  console.log("-----create order API-------");
+  const createdOrder = await createOnlyOrderAPI(orderData);
+  console.log("created order: \n", createdOrder);
+  if (createdOrder && products) {
+    const orderProductRecords: OrderProductRequest[] = products.map((item) => ({
+      ...item,
+      order_id: createdOrder.id,
+    }));
+    console.log("order product");
+    console.log(orderProductRecords);
+    console.log("call order product API");
+    createMultipleOrderProductAPI(orderProductRecords);
+  }
+
+  return createdOrder;
 }

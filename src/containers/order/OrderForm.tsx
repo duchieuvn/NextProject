@@ -1,28 +1,42 @@
 "use client";
-import { Flex, Button, Form, Card, Typography, Divider, Alert } from "antd";
+import { Flex, Button, Form, Card, Typography, message } from "antd";
 
-import useSWR, { mutate } from "swr";
 import OrderFormInfo from "@/components/OrderFormInfo";
 import OrderFormProducts from "@/components/OrderFormProducts";
-import { createOneOrderAPI } from "@/api/apiOrders";
-import { useCreateOrder } from "@/hooks/order";
-import { OrderRequest } from "@/interface/OrderPayload";
+import { createOrderWithProductsAPI } from "@/api/apiOrders";
+import { OrderFormData, OrderRequest } from "@/interface/OrderPayload";
 import { ORDERS_QUERY_KEY } from "@/constants/query/keys";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { NoticeType } from "antd/es/message/interface";
 
 export default function OrderForm() {
+  const [messageApi, contextHolder] = message.useMessage();
   const queryClient = useQueryClient();
+  const [form] = Form.useForm();
+
+  const displayMessage = (messageType: NoticeType) => {
+    messageApi.open({
+      type: messageType,
+      content: "Order created successfully",
+    });
+  };
+
   const { mutate, isPending } = useMutation({
-    mutationFn: createOneOrderAPI,
+    mutationFn: createOrderWithProductsAPI,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: [ORDERS_QUERY_KEY] });
+      displayMessage("success");
     },
   });
-  const [form] = Form.useForm();
+
+  const handleSubmit = () => {
+    const formData: OrderFormData = form.getFieldsValue();
+    mutate(formData);
+  };
 
   return (
     <>
-      <Alert message="Success Tips" type="success" showIcon />
+      {contextHolder}
       <Form
         labelCol={{ span: 2 }}
         wrapperCol={{ span: 8 }}
@@ -30,28 +44,7 @@ export default function OrderForm() {
         name="order_form"
         autoComplete="off"
         initialValues={{}}
-        onFinish={() => {
-          const formInput = form.getFieldsValue();
-          const {
-            phone_number,
-            customer_name,
-            location,
-            ship_price,
-            discount,
-            expected_date,
-          } = formInput;
-
-          const orderData: OrderRequest = {
-            phone_number,
-            customer_name,
-            location,
-            ship_price,
-            discount,
-            expected_date,
-            expected_time: null,
-          };
-          mutate(orderData);
-        }}
+        onFinish={handleSubmit}
       >
         <Card size="small" title={`Đơn hàng`}>
           <Flex vertical>

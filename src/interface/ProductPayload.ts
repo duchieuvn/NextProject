@@ -1,9 +1,9 @@
-export type ProductResponse = ProductModal;
-
 export interface ProductModal {
-  id: number;
+  id: string;
   name: string;
   retail_price: number;
   original_price: number;
   created_at: Date;
 }
+
+export type ProductResponse = ProductModal;

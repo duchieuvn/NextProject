@@ -29,10 +29,9 @@ const items: MenuProps["items"] = [
 ];
 
 export default function NavBar() {
-  const [current, setCurrent] = useState("home");
-  const onClick: MenuProps["onClick"] = (e) => {
-    console.log("click ", e);
-    setCurrent(e.key);
+  const [navSelected, setNavSelected] = useState("home");
+  const navClick: MenuProps["onClick"] = (e) => {
+    setNavSelected(e.key);
   };
   return (
     <nav>
@@ -63,13 +62,13 @@ export default function NavBar() {
             color: "#393a35",
             fontWeight: "bold",
           }}
-          onClick={onClick}
-          selectedKeys={[current]}
+          onClick={navClick}
+          selectedKeys={[navSelected]}
           mode="horizontal"
           items={items}
         />
         <Link href="/orders/create">
-          <Button>Tạo đơn hàng</Button>
+          <Button onClick={() => setNavSelected("")}>Tạo đơn hàng</Button>
         </Link>
       </Flex>
     </nav>
